@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+/*
+ * デザイントークン（Design.md 参照）。
+ * フラットな値は @theme で Tailwind ユーティリティ化し、
+ * グラデーション/シャドウなど複合値は素の CSS変数として各コンポーネントの
+ * スタイルから直接参照する。
+ */
+@theme {
+  --font-display: "Barlow Condensed", "Oswald", sans-serif;
+  --font-ui: "Inter", "Helvetica Neue", sans-serif;
+
+  --color-bg-canvas: #15171a;
+  --color-panel-border: rgb(255 255 255 / 6%);
+  --color-groupbox-border: rgb(94 234 212 / 35%);
+  --color-groupbox-label: #a9b0ac;
+  --color-knob-bezel: rgb(255 255 255 / 8%);
+  --color-accent-mint: #5eead4;
+  --color-accent-mint-dim: rgb(94 234 212 / 25%);
+  --color-accent-mint-glow: rgb(94 234 212 / 45%);
+  --color-text-primary: #e8ebe9;
+  --color-text-secondary: #9aa19d;
+  --color-text-muted: #6b716e;
+  --color-meter-fill-top: #99f6e4;
+  --color-meter-fill-bottom: #0d9488;
+  --color-meter-track: #232523;
+  --color-control-bg: #26282a;
+  --color-control-border: rgb(255 255 255 / 8%);
+  --color-divider: rgb(255 255 255 / 8%);
+  --color-accent-amber: #f0b86e;
+  --color-accent-amber-dim: rgb(240 184 110 / 25%);
+  --color-toggle-track-off: #26282a;
+
+  --radius-panel: 16px;
+  --radius-groupbox: 8px;
+  --radius-control: 4px;
+}
+
+:root {
+  --gradient-bg-canvas-glow: radial-gradient(
+    ellipse at 50% 30%,
+    rgb(45 212 191 / 25%),
+    transparent 60%
+  );
+  --gradient-panel-bg: linear-gradient(180deg, #3c3f3d 0%, #2c2e2c 100%);
+  --gradient-knob-body: radial-gradient(circle at 35% 30%, #3d3f3d 0%, #1c1d1c 70%);
+  --gradient-meter-fill: linear-gradient(
+    180deg,
+    var(--color-meter-fill-top) 0%,
+    var(--color-meter-fill-bottom) 100%
+  );
+  --gradient-spectrum-fill: linear-gradient(
+    180deg,
+    rgb(94 234 212 / 25%) 0%,
+    rgb(94 234 212 / 2%) 100%
+  );
+  --gradient-matrix-scale: linear-gradient(
+    180deg,
+    var(--color-accent-mint) 0%,
+    #232523 50%,
+    var(--color-accent-amber) 100%
+  );
+
+  --shadow-panel-outer: 0 24px 60px rgb(0 0 0 / 50%);
+  --shadow-panel-inset: inset 0 1px 0 rgb(255 255 255 / 5%), inset 0 -1px 0 rgb(0 0 0 / 40%);
+  --shadow-knob: 0 2px 4px rgb(0 0 0 / 60%), inset 0 1px 1px rgb(255 255 255 / 10%);
+  --glow-accent: 0 0 8px var(--color-accent-mint-glow);
+
+  --transition-control: 120ms ease-out;
+}
+
+body {
+  background: var(--color-bg-canvas);
+  font-family: var(--font-ui);
+}
