@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 
-export type KnobSize = "lg" | "md";
+export type KnobSize = "lg" | "md" | "sm";
 
 export interface KnobProps {
   label: string;
@@ -21,7 +21,7 @@ const SWEEP = END_ANGLE - START_ANGLE;
 const DOT_COUNT = 25;
 const DRAG_RANGE_PX = 180;
 
-const SIZE_PX: Record<KnobSize, number> = { lg: 64, md: 56 };
+const SIZE_PX: Record<KnobSize, number> = { lg: 64, md: 56, sm: 48 };
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));

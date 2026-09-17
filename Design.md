@@ -58,30 +58,40 @@
 | トークン名 | 値 | 用途 |
 |---|---|---|
 | `space-panel-padding` | `24px`（実装は`p-6`） | パネル内側の余白 |
-| `space-section-gap-x` | `32px` | パネル内の主要セクション間（横方向）の間隔。GroupBox同士、Decay/Mixクラスタ⇔Spectrum Analyzer⇔メーター、Matrix設定⇔Matrix Weights⇔Loss表示など |
+| `space-section-gap-x` | `32px` | パネル内の主要セクション間（横方向）の間隔。MatrixWeights⇔Spectrum Analyzer⇔メーター、Matrix設定⇔Loss表示など、性質の異なるセクション同士 |
 | `space-section-gap-y` | `20px` | パネル内の主要セクション間（縦方向）の間隔。区切り線（Divider）を挟むブロック同士 |
-| `space-knob-gap-inner` | `24px` | ひとまとまりのノブ群の中での横間隔（GroupBox内、Decay/Mixクラスタ内など） |
+| `space-knob-gap-inner` | `16px` | ひとまとまりのノブ群の中での横間隔（GroupBox内、Decay/Mixクラスタ内など） |
+| `space-knob-row-gap-x` | `20px` | 「ツマミの段」内で、Decay/MixクラスタやGroupBox同士を並べる間隔（`space-section-gap-x`より狭く、同じ種類＝ノブ系コンポーネント同士を詰めて1行に収めるための専用トークン） |
 | `space-groupbox-pad-top` | `20px` | GroupBoxの上パディング（ラベルが枠線に重なる分、下より広めに取る） |
-| `space-groupbox-pad-x` | `16px` | GroupBoxの左右パディング |
+| `space-groupbox-pad-x` | `12px` | GroupBoxの左右パディング |
 | `space-groupbox-pad-bottom` | `16px` | GroupBoxの下パディング |
-| `size-knob-lg` | `64px` | メインパラメータ用ノブ直径 |
-| `size-knob-md` | `56px` | グループ内ノブ直径 |
+| `size-knob-lg` | `64px` | Decay/Mixなど主役パラメータ用ノブ直径 |
+| `size-knob-md` | `56px` | 単体で使う場合の標準ノブ直径 |
+| `size-knob-sm` | `48px` | GroupBox内など、ノブ数が多いクラスタ用の縮小ノブ直径 |
 | `size-knob-label-height` | `28px` | ノブのラベル表示領域の**固定高さ**（後述） |
 | `size-meter-width` | `10px` | レベルメーター幅 |
 | `size-meter-height` | `160px` | レベルメーター高さ |
 | `radius-panel` | `16px` | パネル本体の角丸 |
 | `radius-groupbox` | `8px` | グループ枠の角丸 |
 | `radius-control` | `4px` | ボタン・入力欄の角丸 |
+| `radius-preset-nav` | `4px` | プリセット送りボタンの角丸 |
 
 #### 高さ揃え・アライメントのルール
 
-パラメータ名によってラベルが1行（`Delay`）だったり2行（`Predelay\nFeedback`）だったりするため、素朴に実装すると同じ`size="md"`のノブでも全高がラベルの行数分ブレてしまい、隣り合う`GroupBox`（Delay / Modulation / Filter）の高さが揃わず「洗練されていない」印象になる。これを防ぐため:
+パラメータ名によってラベルが1行（`Delay`）だったり2行（`Predelay\nFeedback`）だったりするため、素朴に実装すると同じ`size`のノブでも全高がラベルの行数分ブレてしまい、隣り合う`GroupBox`（Delay / Modulation / Filter）の高さが揃わず「洗練されていない」印象になる。これを防ぐため:
 
 - `Knob`のラベル領域は`size-knob-label-height`（28px＝2行分）で**固定**し、1行のときは内容を上下中央寄せする。これによりラベルの行数に関わらず、同じ`size`のノブは常に同じ全高になる
 - `GroupBox`は`items-start`で子要素（ノブ）を上揃えし、パディングも固定値（`space-groupbox-pad-*`）を使う。ノブの全高が揃っていれば、内容量に関わらずGroupBox自体の高さも自動的に揃う
 - 複数の`GroupBox`を横に並べる行（例: Delay / Modulation / Filter）は`items-start`のflexで揃え、ノブ数が異なるグループ同士でも上端・高さ双方が一致する
-- セクション間の間隔は「横方向は`space-section-gap-x`、縦方向は`space-section-gap-y`、グループ内の細かい間隔は`space-knob-gap-inner`」の3段階に統一し、場当たり的な`gap`値を使わない
-| `radius-preset-nav` | `4px` | プリセット送りボタンの角丸 |
+- セクション間の間隔は「異なる種類のセクション間は`space-section-gap-x`（横）/ `space-section-gap-y`（縦）、同じ種類のノブ系コンポーネントを並べる“ツマミの段”内は`space-knob-row-gap-x`、グループ内の細かい間隔は`space-knob-gap-inner`」の3段階に統一し、場当たり的な`gap`値を使わない
+
+#### 余白を残さないための方針
+
+パネル幅は`max-width: 800px`に固定しているため、パラメータ数の多いセクション（8つのノブなど）を1行に収めようとすると単純な等倍縮小では収まらないことがある。その場合は次の優先順位で調整する:
+
+1. まず間隔（`space-knob-row-gap-x` / `space-knob-gap-inner` / `space-groupbox-pad-x`）を詰める
+2. それでも収まらない場合、優先度の低いパラメータ群のノブサイズを`size-knob-md`→`size-knob-sm`に落とす（主役の`Decay`/`Mix`は`lg`のまま維持し、情報階層を保つ）
+3. 行の途中半端な位置で折り返して余白ができるくらいなら、詰めて1行に収める方を優先する
 
 ### 2.4 エフェクト
 
@@ -107,7 +117,7 @@
   - 周囲のドット目盛（270°スイープ、非アクティブ = `color-accent-mint-dim`、アクティブ範囲 = `color-accent-mint` + `glow-accent`）
   - 下部ラベル（`font-size-label`、`color-text-secondary`。`\n`で複数行ラベルにも対応。表示領域は`size-knob-label-height`で固定し、1行/2行どちらでも同じ`size`のノブは全高が揃う）
   - さらにその下、`valueLabel`（任意）を指定するとフォーマット済みの数値（例: `3.20 s`、`120 Hz`）を`color-accent-mint`で表示
-- **バリアント**: `size` = `lg`(64px) / `md`(56px)
+- **バリアント**: `size` = `lg`(64px) / `md`(56px) / `sm`(48px)
 - **状態**: `default`, `hover`（ベゼルがわずかに明るくなる）, `active/dragging`（グローが強まる）, `disabled`（彩度を落とす）
 - **Props例**: `label`, `value`, `min`, `max`, `defaultValue`, `size`, `valueLabel`, `onChange`
 
@@ -183,7 +193,7 @@
 
 - 上記コンポーネントすべてを内包する角丸パネル（`radius-panel`、`color-panel-bg`、`shadow-panel-outer` + `shadow-panel-inset`）
 - 背景に `color-bg-canvas` と `color-bg-canvas-glow`（波状のミントグローを模したデコレーション）を敷く
-- レイアウト: 上段に Decay/Mix ノブ + Spectrum Analyzer + I/Oメーター + ロゴ、中段に `GroupBox` で束ねたパラメータノブ群（Delay系 / Modulation系 / Filter系）、下段に Matrix設定・Matrix Weights・Loss表示、最下段に `PresetBar`
+- レイアウト: 上段に `MatrixWeights` + `SpectrumAnalyzer` + I/Oメーター + ロゴ、中段（ツマミの段）に Decay/Mix ノブと `GroupBox` で束ねたパラメータノブ群（Delay系 / Modulation系 / Filter系）を1行に集約、下段に Matrix設定・Loss表示・Infinite/Freezeトグル、最下段に `PresetBar`
 - パラメータ（Decay / Mix / Delay / Predelay / Predelay Feedback / External Feedback / Modulation / Damping / HPF / LPF）は内部状態として保持し、ノブの`valueLabel`をリアルタイム更新。HPF/LPFの値は`SpectrumAnalyzer`のカーブにもそのまま反映される
 - `matrixData` / `spectralLossTrend` / `sparsityLoss` はpropsで外部から差し替え可能
 
@@ -191,18 +201,23 @@
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│ (Decay)(Mix)        SPECTRUM ANALYZER              [I][O]  LOGO   │
+│ MATRIX WEIGHTS            SPECTRUM ANALYZER          [I][O] LOGO  │
 ├──────────────────────────────────────────────────────────────────┤
-│ ┌Delay───────────────┐ ┌Modulation─┐ ┌Filter────┐                 │
-│ │Delay Predelay …    │ │Mod Damp   │ │HPF LPF   │                 │
-│ └─────────────────────┘ └───────────┘ └──────────┘                │
+│ (Decay)(Mix) ┌Delay───────────┐┌Modulation─┐┌Filter────┐          │
+│              │Delay Predelay …││Mod Damp   ││HPF LPF   │          │
+│              └─────────────────┘└───────────┘└──────────┘         │
 ├──────────────────────────────────────────────────────────────────┤
-│ Matrix設定(Dropdown×3)   MATRIX WEIGHTS     Spectral/Sparsity Loss │
-│                                              Infinite / Freeze     │
+│ Matrix設定(Dropdown×3)                Spectral/Sparsity Loss       │
+│                                        Infinite / Freeze           │
 ├──────────────────────────────────────────────────────────────────┤
 │ Preset ◀ [Init] ▶ [name入力] [Save][Init][Bypass]                 │
 └──────────────────────────────────────────────────────────────────┘
 ```
+
+- 1段目: `MatrixWeights`（左）と`SpectrumAnalyzer`（右）を横並びにした「可視化2枚」の段
+- 2段目: `Decay`/`Mix`と3つの`GroupBox`（Delay / Modulation / Filter）を**すべて1行に集約**した「ツマミの段」。間隔は`space-knob-row-gap-x`、収まりきらない場合はノブサイズを`sm`に落として対応する（上記「余白を残さないための方針」参照）
+- 3段目: Matrix設定（Dropdown×3、左）と Loss表示 + Infinite/Freeze（右）を`justify-between`で両端に配置
+- 4段目: `PresetBar`
 
 ## 5. Storybookでの管理方針
 
