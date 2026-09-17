@@ -30,10 +30,32 @@
   --color-accent-amber: #f0b86e;
   --color-accent-amber-dim: rgb(240 184 110 / 25%);
   --color-toggle-track-off: #26282a;
+  --color-groupbox-label-bg: #333533;
 
   --radius-panel: 16px;
   --radius-groupbox: 8px;
   --radius-control: 4px;
+}
+
+/*
+ * レイアウトトークン（高さ・余白・間隔）。
+ * @theme に含めないのは、Tailwindのスペーシングスケール生成対象にせず
+ * 各コンポーネントで明示的に var() 参照させるため（意図しない値のブレを防ぐ）。
+ */
+:root {
+  /* ノブのラベル欄は1行/2行どちらでも高さを固定し、Knobの全高（ひいてはGroupBoxの高さ）を揃える */
+  --size-knob-label-height: 28px;
+
+  --space-groupbox-pad-top: 20px;
+  --space-groupbox-pad-x: 16px;
+  --space-groupbox-pad-bottom: 16px;
+
+  /* GroupBox内、ノブ同士の間隔 */
+  --space-knob-gap-inner: 24px;
+  /* パネル内の主要セクション間（横方向）の間隔。GroupBox同士、Decay/Mix⇔Spectrum⇔Meter等 */
+  --space-section-gap-x: 32px;
+  /* パネル内の主要セクション間（縦方向）の間隔。区切り線を挟むブロック同士 */
+  --space-section-gap-y: 20px;
 }
 
 :root {

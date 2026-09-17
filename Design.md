@@ -53,20 +53,34 @@
 | `font-size-preset` | `13px` / `font-weight: 600` | プリセット名表示 |
 | `font-size-button` | `11px` / `font-weight: 600` / `letter-spacing: 0.04em` | ボタンラベル |
 
-### 2.3 スペーシング & サイズ
+### 2.3 スペーシング・サイズ
 
 | トークン名 | 値 | 用途 |
 |---|---|---|
-| `space-panel-padding` | `24px` | パネル内側の余白 |
-| `space-knob-gap-x` | `32px` | ノブ同士の横間隔 |
-| `space-knob-gap-y` | `40px` | ノブ行間の縦間隔 |
+| `space-panel-padding` | `24px`（実装は`p-6`） | パネル内側の余白 |
+| `space-section-gap-x` | `32px` | パネル内の主要セクション間（横方向）の間隔。GroupBox同士、Decay/Mixクラスタ⇔Spectrum Analyzer⇔メーター、Matrix設定⇔Matrix Weights⇔Loss表示など |
+| `space-section-gap-y` | `20px` | パネル内の主要セクション間（縦方向）の間隔。区切り線（Divider）を挟むブロック同士 |
+| `space-knob-gap-inner` | `24px` | ひとまとまりのノブ群の中での横間隔（GroupBox内、Decay/Mixクラスタ内など） |
+| `space-groupbox-pad-top` | `20px` | GroupBoxの上パディング（ラベルが枠線に重なる分、下より広めに取る） |
+| `space-groupbox-pad-x` | `16px` | GroupBoxの左右パディング |
+| `space-groupbox-pad-bottom` | `16px` | GroupBoxの下パディング |
 | `size-knob-lg` | `64px` | メインパラメータ用ノブ直径 |
-| `size-knob-md` | `56px` | グループ内ノブ直径（Early Reflections等） |
+| `size-knob-md` | `56px` | グループ内ノブ直径 |
+| `size-knob-label-height` | `28px` | ノブのラベル表示領域の**固定高さ**（後述） |
 | `size-meter-width` | `10px` | レベルメーター幅 |
 | `size-meter-height` | `160px` | レベルメーター高さ |
 | `radius-panel` | `16px` | パネル本体の角丸 |
 | `radius-groupbox` | `8px` | グループ枠の角丸 |
 | `radius-control` | `4px` | ボタン・入力欄の角丸 |
+
+#### 高さ揃え・アライメントのルール
+
+パラメータ名によってラベルが1行（`Delay`）だったり2行（`Predelay\nFeedback`）だったりするため、素朴に実装すると同じ`size="md"`のノブでも全高がラベルの行数分ブレてしまい、隣り合う`GroupBox`（Delay / Modulation / Filter）の高さが揃わず「洗練されていない」印象になる。これを防ぐため:
+
+- `Knob`のラベル領域は`size-knob-label-height`（28px＝2行分）で**固定**し、1行のときは内容を上下中央寄せする。これによりラベルの行数に関わらず、同じ`size`のノブは常に同じ全高になる
+- `GroupBox`は`items-start`で子要素（ノブ）を上揃えし、パディングも固定値（`space-groupbox-pad-*`）を使う。ノブの全高が揃っていれば、内容量に関わらずGroupBox自体の高さも自動的に揃う
+- 複数の`GroupBox`を横に並べる行（例: Delay / Modulation / Filter）は`items-start`のflexで揃え、ノブ数が異なるグループ同士でも上端・高さ双方が一致する
+- セクション間の間隔は「横方向は`space-section-gap-x`、縦方向は`space-section-gap-y`、グループ内の細かい間隔は`space-knob-gap-inner`」の3段階に統一し、場当たり的な`gap`値を使わない
 | `radius-preset-nav` | `4px` | プリセット送りボタンの角丸 |
 
 ### 2.4 エフェクト
@@ -91,7 +105,7 @@
   - ノブ本体（`color-knob-body-inner` → `color-knob-body-outer` の放射状グラデ、`color-knob-bezel` の外周リム）
   - 値インジケーター（中心から伸びる短いポインターライン、白〜`color-accent-mint`）
   - 周囲のドット目盛（270°スイープ、非アクティブ = `color-accent-mint-dim`、アクティブ範囲 = `color-accent-mint` + `glow-accent`）
-  - 下部ラベル（`font-size-label`、`color-text-secondary`。`\n`で複数行ラベルにも対応）
+  - 下部ラベル（`font-size-label`、`color-text-secondary`。`\n`で複数行ラベルにも対応。表示領域は`size-knob-label-height`で固定し、1行/2行どちらでも同じ`size`のノブは全高が揃う）
   - さらにその下、`valueLabel`（任意）を指定するとフォーマット済みの数値（例: `3.20 s`、`120 Hz`）を`color-accent-mint`で表示
 - **バリアント**: `size` = `lg`(64px) / `md`(56px)
 - **状態**: `default`, `hover`（ベゼルがわずかに明るくなる）, `active/dragging`（グローが強まる）, `disabled`（彩度を落とす）
@@ -99,11 +113,12 @@
 
 ### 3.2 `GroupBox`（パラメータグループ枠）
 
-関連するノブ群（例: Early Reflections）を囲む枠。
+関連するノブ群（例: Delay / Modulation / Filter）を囲む枠。
 
 - 角丸の薄い枠線（`color-groupbox-border`、`radius-groupbox`）
-- 左上に小さなラベル（枠線を分断する形で配置、`font-size-groupbox-label`）
-- 内部に `Knob` を複数配置するコンテナ
+- 左上に小さなラベル（枠線を分断する形で配置、`font-size-groupbox-label`、背景は`color-groupbox-label-bg`でパネル背景を隠す）
+- パディングは`space-groupbox-pad-top` / `space-groupbox-pad-x` / `space-groupbox-pad-bottom`で固定
+- 内部に `Knob` を複数、`items-start`・`space-knob-gap-inner`間隔で配置するコンテナ。`Knob`側の高さが揃っている前提のため、GroupBox自体の高さもノブ数に関わらず自動的に揃う
 
 ### 3.3 `LevelMeter`（レベルメーター）
 

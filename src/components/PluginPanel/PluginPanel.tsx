@@ -90,10 +90,13 @@ export function PluginPanel({
   const [freeze, setFreeze] = useState(false);
 
   return (
-    <div className="max-h-[800px] max-w-[1000px] overflow-auto rounded-panel border border-panel-border bg-[image:var(--gradient-panel-bg)] shadow-[var(--shadow-panel-outer)] [box-shadow:var(--shadow-panel-outer),var(--shadow-panel-inset)]">
-      <div className="flex w-[1000px] flex-col gap-5 p-6">
-        <div className="flex items-start gap-8">
-          <div className="flex shrink-0 gap-8">
+    <div className="max-h-[800px] max-w-[800px] overflow-auto rounded-panel border border-panel-border bg-[image:var(--gradient-panel-bg)] shadow-[var(--shadow-panel-outer)] [box-shadow:var(--shadow-panel-outer),var(--shadow-panel-inset)]">
+      <div
+        className="flex w-[800px] flex-col p-6"
+        style={{ gap: "var(--space-section-gap-y)" }}
+      >
+        <div className="flex items-start" style={{ gap: "var(--space-section-gap-x)" }}>
+          <div className="flex shrink-0 items-start" style={{ gap: "var(--space-knob-gap-inner)" }}>
             <Knob label="Decay" size="lg" value={decay} min={0.1} max={10} onChange={setDecay} valueLabel={`${decay.toFixed(2)} s`} />
             <Knob label="Mix" size="lg" value={mix} min={0} max={100} onChange={setMix} valueLabel={`${mix.toFixed(1)}%`} />
           </div>
@@ -111,7 +114,7 @@ export function PluginPanel({
 
         <div className="h-px bg-divider" />
 
-        <div className="flex items-start gap-6">
+        <div className="flex items-start" style={{ gap: "var(--space-section-gap-x)" }}>
           <GroupBox label="Delay">
             <Knob
               size="md"

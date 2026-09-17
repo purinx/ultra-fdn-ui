@@ -158,9 +158,14 @@ export function Knob({
           </svg>
         </div>
       </div>
-      <span className="whitespace-pre-line text-center text-[11px] font-medium leading-tight tracking-wide text-text-secondary">
-        {label}
-      </span>
+      <div
+        className="flex items-center justify-center"
+        style={{ height: "var(--size-knob-label-height)" }}
+      >
+        <span className="whitespace-pre-line text-center text-[11px] font-medium leading-tight tracking-wide text-text-secondary">
+          {label}
+        </span>
+      </div>
       {valueLabel && (
         <span className="text-[11px] font-semibold text-accent-mint">{valueLabel}</span>
       )}
