@@ -122,7 +122,7 @@ export function PluginPanel({
           className="flex flex-wrap items-start"
           style={{ columnGap: "var(--space-knob-row-gap-x)", rowGap: "var(--space-section-gap-y)" }}
         >
-          <div className="flex shrink-0 items-start" style={{ gap: "var(--space-knob-gap-inner)" }}>
+          <div className="flex shrink-0 items-start self-center" style={{ gap: "var(--space-knob-gap-inner)" }}>
             <Knob label="Decay" size="lg" value={decay} min={0.1} max={10} onChange={setDecay} valueLabel={`${decay.toFixed(2)} s`} />
             <Knob label="Mix" size="lg" value={mix} min={0} max={100} onChange={setMix} valueLabel={`${mix.toFixed(1)}%`} />
           </div>
