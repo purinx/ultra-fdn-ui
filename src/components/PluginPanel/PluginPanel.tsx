@@ -95,11 +95,16 @@ export function PluginPanel({
         className="flex w-[800px] flex-col p-6"
         style={{ gap: "var(--space-section-gap-y)" }}
       >
-        <div className="flex items-start" style={{ gap: "var(--space-section-gap-x)" }}>
-          <div className="w-[300px] shrink-0">
-            <MatrixWeights data={matrixData} />
+        <div className="flex items-stretch" style={{ gap: "var(--space-section-gap-x)" }}>
+          <div className="flex w-[150px] shrink-0 flex-col gap-3">
+            <StatReadout label="Spectral Loss" value="" trend={spectralLossTrend} />
+            <StatReadout label="Sparsity Loss" value={sparsityLoss} />
+            <div className="mt-1 flex flex-col gap-2 border-t border-divider pt-3">
+              <ToggleSwitch label="Infinite" checked={infinite} onChange={setInfinite} />
+              <ToggleSwitch label="Freeze" checked={freeze} onChange={setFreeze} />
+            </div>
           </div>
-          <div className="flex-1 self-center">
+          <div className="flex-1">
             <SpectrumAnalyzer hpfHz={knobValues.hpf} lpfHz={knobValues.lpf} />
           </div>
           <div className="flex shrink-0 items-start gap-4">
@@ -206,8 +211,8 @@ export function PluginPanel({
 
         <div className="h-px bg-divider" />
 
-        <div className="flex items-start justify-between">
-          <div className="flex" style={{ gap: "var(--space-knob-gap-inner)" }}>
+        <div className="flex items-start" style={{ gap: "var(--space-section-gap-x)" }}>
+          <div className="flex shrink-0" style={{ gap: "var(--space-knob-gap-inner)" }}>
             <div className="w-[150px]">
               <Dropdown label="Matrix" options={MATRIX_OPTIONS} value={matrixType} onChange={setMatrixType} />
             </div>
@@ -219,15 +224,8 @@ export function PluginPanel({
             </div>
           </div>
 
-          <div className="flex items-start" style={{ gap: "var(--space-section-gap-x)" }}>
-            <div className="flex flex-col gap-3">
-              <StatReadout label="Spectral Loss" value="" trend={spectralLossTrend} />
-              <StatReadout label="Sparsity Loss" value={sparsityLoss} />
-            </div>
-            <div className="flex flex-col gap-2 border-l border-divider pl-6">
-              <ToggleSwitch label="Infinite" checked={infinite} onChange={setInfinite} />
-              <ToggleSwitch label="Freeze" checked={freeze} onChange={setFreeze} />
-            </div>
+          <div className="flex-1">
+            <MatrixWeights data={matrixData} />
           </div>
         </div>
       </div>

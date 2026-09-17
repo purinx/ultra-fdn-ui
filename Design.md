@@ -172,6 +172,7 @@
 ### 3.8 `SpectrumAnalyzer`
 
 - 対数周波数軸（20Hz〜20kHz）× dB軸（0〜-100dB）のスペクトラム表示。線・エリア塗り・HPF/LPFマーカーはすべてミント系
+- 内部の`<svg>`は`viewBox`固定＋`preserveAspectRatio="none"`＋`flex-1`（親が`h-full`）で構成し、**縦横比を保たず親コンテナの高さいっぱいに伸縮する**。`PluginPanel`では隣接する列（Loss表示・I/Oメーター）と`items-stretch`で高さを揃えることで、他の列と同じ高さまでグラフを拡大している
 - 実際の音声解析は行わず、**props経由で任意のデータに差し替え可能**:
   - `curve?: number[]`（HPF/LPFのエンベロープ線。未指定時は`hpfHz`/`lpfHz`から4次ロールオフを近似計算した曲線をデフォルト表示）
   - `noise?: number[]`（背景のギザギザしたノイズフロア。未指定時は決定的な疑似乱数で生成）
@@ -183,6 +184,7 @@
 - FDNのフィードバック行列の重みを表すヒートマップ。セルは`-1〜+1`の値を「アンバー(-1) → ダーク(0) → ミント(+1)」で色分け（`gradient-matrix-scale`）
 - 右側に縦方向のカラースケール凡例（`+1` / `0` / `-1`）
 - `data?: number[][]` をpropsで受け取り、**未指定時は決定的な疑似乱数パターンをデフォルト表示**
+- 幅は利用側のレイアウトに委ねる（`PluginPanel`では下段で`flex-1`として横幅いっぱいに広げている）
 
 ### 3.10 `StatReadout`
 
@@ -193,7 +195,8 @@
 
 - 上記コンポーネントすべてを内包する角丸パネル（`radius-panel`、`color-panel-bg`、`shadow-panel-outer` + `shadow-panel-inset`）
 - 背景に `color-bg-canvas` と `color-bg-canvas-glow`（波状のミントグローを模したデコレーション）を敷く
-- レイアウト: 上段に `MatrixWeights` + `SpectrumAnalyzer` + I/Oメーター + ロゴ、中段（ツマミの段）に Decay/Mix ノブと `GroupBox` で束ねたパラメータノブ群（Delay系 / Modulation系 / Filter系）を1行に集約、下段に Matrix設定・Loss表示・Infinite/Freezeトグル、最下段に `PresetBar`
+- レイアウト: 上段に `StatReadout`（Spectral/Sparsity Loss）+ `ToggleSwitch`（Infinite/Freeze）+ `SpectrumAnalyzer` + I/Oメーター + ロゴ、中段（ツマミの段）に Decay/Mix ノブと `GroupBox` で束ねたパラメータノブ群（Delay系 / Modulation系 / Filter系）を1行に集約、下段に Matrix設定（Dropdown×3）+ `MatrixWeights`、最下段に `PresetBar`
+- 上段は`items-stretch`で揃え、`SpectrumAnalyzer`が左列（Loss表示）・右列（メーター）と同じ高さまで縦に伸びる
 - パラメータ（Decay / Mix / Delay / Predelay / Predelay Feedback / External Feedback / Modulation / Damping / HPF / LPF）は内部状態として保持し、ノブの`valueLabel`をリアルタイム更新。HPF/LPFの値は`SpectrumAnalyzer`のカーブにもそのまま反映される
 - `matrixData` / `spectralLossTrend` / `sparsityLoss` はpropsで外部から差し替え可能
 
@@ -201,22 +204,23 @@
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│ MATRIX WEIGHTS            SPECTRUM ANALYZER          [I][O] LOGO  │
+│ Spectral Loss     SPECTRUM ANALYZER                   [I][O] LOGO │
+│ Sparsity Loss                                                     │
+│ Infinite / Freeze                                                 │
 ├──────────────────────────────────────────────────────────────────┤
 │ (Decay)(Mix) ┌Delay───────────┐┌Modulation─┐┌Filter────┐          │
 │              │Delay Predelay …││Mod Damp   ││HPF LPF   │          │
 │              └─────────────────┘└───────────┘└──────────┘         │
 ├──────────────────────────────────────────────────────────────────┤
-│ Matrix設定(Dropdown×3)                Spectral/Sparsity Loss       │
-│                                        Infinite / Freeze           │
+│ Matrix設定(Dropdown×3)   MATRIX WEIGHTS                            │
 ├──────────────────────────────────────────────────────────────────┤
 │ Preset ◀ [Init] ▶ [name入力] [Save][Init][Bypass]                 │
 └──────────────────────────────────────────────────────────────────┘
 ```
 
-- 1段目: `MatrixWeights`（左）と`SpectrumAnalyzer`（右）を横並びにした「可視化2枚」の段
+- 1段目: 左列に`StatReadout`（Spectral/Sparsity Loss）と`ToggleSwitch`（Infinite/Freeze）を縦積み、中央に`SpectrumAnalyzer`（`items-stretch`で左列・右列と同じ高さまで伸長）、右にI/Oメーターとロゴ
 - 2段目: `Decay`/`Mix`と3つの`GroupBox`（Delay / Modulation / Filter）を**すべて1行に集約**した「ツマミの段」。間隔は`space-knob-row-gap-x`、収まりきらない場合はノブサイズを`sm`に落として対応する（上記「余白を残さないための方針」参照）
-- 3段目: Matrix設定（Dropdown×3、左）と Loss表示 + Infinite/Freeze（右）を`justify-between`で両端に配置
+- 3段目: Matrix設定（Dropdown×3、左、幅固定）と`MatrixWeights`（右、`flex-1`で残り幅いっぱいに拡大）
 - 4段目: `PresetBar`
 
 ## 5. Storybookでの管理方針

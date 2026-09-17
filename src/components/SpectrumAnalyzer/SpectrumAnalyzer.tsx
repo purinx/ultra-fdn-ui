@@ -87,7 +87,7 @@ export function SpectrumAnalyzer({
   const lpfY = dbToY(curveSamples[Math.min(Math.max(lpfIndex, 0), curveSamples.length - 1)]);
 
   return (
-    <div className="flex w-full flex-col gap-1">
+    <div className="flex h-full w-full flex-col gap-1">
       <div className="flex items-center justify-between">
         <span className="text-[10px] font-semibold uppercase tracking-wider text-groupbox-label">{title}</span>
         <span className="flex items-center gap-1.5 text-[10px] font-medium text-text-secondary">
@@ -97,7 +97,7 @@ export function SpectrumAnalyzer({
         </span>
       </div>
 
-      <svg viewBox={`0 0 ${VIEW_W} ${VIEW_H}`} className="w-full" preserveAspectRatio="none">
+      <svg viewBox={`0 0 ${VIEW_W} ${VIEW_H}`} className="w-full flex-1" preserveAspectRatio="none">
         {DB_TICKS.map((db) => (
           <g key={db}>
             <line
