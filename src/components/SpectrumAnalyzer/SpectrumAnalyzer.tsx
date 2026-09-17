@@ -89,8 +89,8 @@ export function SpectrumAnalyzer({
   return (
     <div className="flex h-full w-full flex-col gap-1">
       <div className="flex items-center justify-between">
-        <span className="text-[10px] font-semibold uppercase tracking-wider text-groupbox-label">{title}</span>
-        <span className="flex items-center gap-1.5 text-[10px] font-medium text-text-secondary">
+        <span className="text-[15px] font-semibold uppercase tracking-wider text-groupbox-label">{title}</span>
+        <span className="flex items-center gap-1.5 text-[13px] font-medium text-text-secondary">
           Preview spectrum
           <span className="inline-block h-[2px] w-4 bg-accent-mint" />
           {legendLabel}
@@ -108,12 +108,12 @@ export function SpectrumAnalyzer({
               stroke="var(--color-divider)"
               strokeWidth={1}
             />
-            <text x={0} y={dbToY(db) + 3} fontSize={9} fill="var(--color-text-muted)">
+            <text x={0} y={dbToY(db) + 3} fontSize={12} fill="var(--color-text-muted)">
               {db}
             </text>
           </g>
         ))}
-        <text x={0} y={PLOT_TOP - 0} fontSize={9} fill="var(--color-text-muted)">
+        <text x={0} y={PLOT_TOP - 0} fontSize={12} fill="var(--color-text-muted)">
           dB
         </text>
 
@@ -122,7 +122,7 @@ export function SpectrumAnalyzer({
             key={freq}
             x={freqToX(freq)}
             y={VIEW_H - 6}
-            fontSize={9}
+            fontSize={12}
             fill="var(--color-text-muted)"
             textAnchor="middle"
           >
@@ -142,11 +142,11 @@ export function SpectrumAnalyzer({
         </defs>
 
         <circle cx={hpfX} cy={hpfY} r={3} fill="var(--color-accent-mint)" style={{ filter: "drop-shadow(0 0 3px var(--color-accent-mint-glow))" }} />
-        <text x={Math.max(hpfX, PLOT_LEFT + 2)} y={12} fontSize={9} fill="var(--color-text-secondary)" textAnchor="start">
+        <text x={Math.max(hpfX, PLOT_LEFT + 2)} y={12} fontSize={12} fill="var(--color-text-secondary)" textAnchor="start">
           HPF {hpfHz} Hz
         </text>
         <circle cx={lpfX} cy={lpfY} r={3} fill="var(--color-accent-mint)" style={{ filter: "drop-shadow(0 0 3px var(--color-accent-mint-glow))" }} />
-        <text x={Math.min(lpfX, PLOT_RIGHT - 2)} y={12} fontSize={9} fill="var(--color-text-secondary)" textAnchor="end">
+        <text x={Math.min(lpfX, PLOT_RIGHT - 2)} y={12} fontSize={12} fill="var(--color-text-secondary)" textAnchor="end">
           LPF {lpfHz >= 1000 ? `${lpfHz / 1000}kHz` : `${lpfHz}Hz`}
         </text>
       </svg>

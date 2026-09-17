@@ -90,24 +90,21 @@ export function PluginPanel({
   const [freeze, setFreeze] = useState(false);
 
   return (
-    <div className="max-h-[800px] max-w-[800px] overflow-auto rounded-panel border border-panel-border bg-[image:var(--gradient-panel-bg)] shadow-[var(--shadow-panel-outer)] [box-shadow:var(--shadow-panel-outer),var(--shadow-panel-inset)]">
+    <div style={{ width: 600, height: 422 }} className="overflow-hidden">
       <div
-        className="flex w-[800px] flex-col p-6"
-        style={{ gap: "var(--space-section-gap-y)" }}
+        className="origin-top-left rounded-panel border border-panel-border bg-[image:var(--gradient-panel-bg)] shadow-[var(--shadow-panel-outer)] [box-shadow:var(--shadow-panel-outer),var(--shadow-panel-inset)]"
+        style={{ width: 1200, transform: "scale(0.5)" }}
       >
+      <div className="flex w-[1200px] flex-col px-8 py-10" style={{ gap: "var(--space-section-gap-y)" }}>
         <div className="flex items-stretch" style={{ gap: "var(--space-section-gap-x)" }}>
-          <div className="flex w-[150px] shrink-0 flex-col gap-3">
+          <div className="flex w-[340px] shrink-0 flex-col gap-4">
             <StatReadout label="Spectral Loss" value="" trend={spectralLossTrend} />
             <StatReadout label="Sparsity Loss" value={sparsityLoss} />
-            <div className="mt-1 flex flex-col gap-2 border-t border-divider pt-3">
-              <ToggleSwitch label="Infinite" checked={infinite} onChange={setInfinite} />
-              <ToggleSwitch label="Freeze" checked={freeze} onChange={setFreeze} />
-            </div>
           </div>
           <div className="flex-1">
             <SpectrumAnalyzer hpfHz={knobValues.hpf} lpfHz={knobValues.lpf} />
           </div>
-          <div className="flex shrink-0 items-start gap-4">
+          <div className="flex shrink-0 items-start self-center gap-4">
             <div className="flex gap-3">
               <LevelMeter label="I" level={inputLevel} />
               <LevelMeter label="O" level={outputLevel} />
@@ -118,18 +115,18 @@ export function PluginPanel({
 
         <div className="h-px bg-divider" />
 
-        <div
-          className="flex flex-wrap items-start"
-          style={{ columnGap: "var(--space-knob-row-gap-x)", rowGap: "var(--space-section-gap-y)" }}
-        >
-          <div className="flex shrink-0 items-start self-center" style={{ gap: "var(--space-knob-gap-inner)" }}>
-            <Knob label="Decay" size="lg" value={decay} min={0.1} max={10} onChange={setDecay} valueLabel={`${decay.toFixed(2)} s`} />
-            <Knob label="Mix" size="lg" value={mix} min={0} max={100} onChange={setMix} valueLabel={`${mix.toFixed(1)}%`} />
+        <div className="flex flex-wrap items-start justify-between" style={{ rowGap: "var(--space-section-gap-y)" }}>
+          <div
+            className="flex shrink-0 items-start self-center pr-6"
+            style={{ gap: "var(--space-knob-gap-inner)" }}
+          >
+            <Knob label="Decay" size="xl" value={decay} min={0.1} max={10} onChange={setDecay} valueLabel={`${decay.toFixed(2)} s`} />
+            <Knob label="Mix" size="xl" value={mix} min={0} max={100} onChange={setMix} valueLabel={`${mix.toFixed(1)}%`} />
           </div>
 
           <GroupBox label="Delay">
             <Knob
-              size="sm"
+              size="md"
               label={KNOB_PARAMS.delay.label}
               value={knobValues.delay}
               min={KNOB_PARAMS.delay.min}
@@ -138,7 +135,7 @@ export function PluginPanel({
               valueLabel={KNOB_PARAMS.delay.format(knobValues.delay)}
             />
             <Knob
-              size="sm"
+              size="md"
               label={KNOB_PARAMS.predelay.label}
               value={knobValues.predelay}
               min={KNOB_PARAMS.predelay.min}
@@ -147,7 +144,7 @@ export function PluginPanel({
               valueLabel={KNOB_PARAMS.predelay.format(knobValues.predelay)}
             />
             <Knob
-              size="sm"
+              size="md"
               label={KNOB_PARAMS.predelayFeedback.label}
               value={knobValues.predelayFeedback}
               min={KNOB_PARAMS.predelayFeedback.min}
@@ -156,7 +153,7 @@ export function PluginPanel({
               valueLabel={KNOB_PARAMS.predelayFeedback.format(knobValues.predelayFeedback)}
             />
             <Knob
-              size="sm"
+              size="md"
               label={KNOB_PARAMS.externalFeedback.label}
               value={knobValues.externalFeedback}
               min={KNOB_PARAMS.externalFeedback.min}
@@ -168,7 +165,7 @@ export function PluginPanel({
 
           <GroupBox label="Modulation">
             <Knob
-              size="sm"
+              size="md"
               label={KNOB_PARAMS.modulation.label}
               value={knobValues.modulation}
               min={KNOB_PARAMS.modulation.min}
@@ -177,7 +174,7 @@ export function PluginPanel({
               valueLabel={KNOB_PARAMS.modulation.format(knobValues.modulation)}
             />
             <Knob
-              size="sm"
+              size="md"
               label={KNOB_PARAMS.damping.label}
               value={knobValues.damping}
               min={KNOB_PARAMS.damping.min}
@@ -189,7 +186,7 @@ export function PluginPanel({
 
           <GroupBox label="Filter">
             <Knob
-              size="sm"
+              size="md"
               label={KNOB_PARAMS.hpf.label}
               value={knobValues.hpf}
               min={KNOB_PARAMS.hpf.min}
@@ -198,7 +195,7 @@ export function PluginPanel({
               valueLabel={KNOB_PARAMS.hpf.format(knobValues.hpf)}
             />
             <Knob
-              size="sm"
+              size="md"
               label={KNOB_PARAMS.lpf.label}
               value={knobValues.lpf}
               min={KNOB_PARAMS.lpf.min}
@@ -212,7 +209,7 @@ export function PluginPanel({
         <div className="h-px bg-divider" />
 
         <div className="flex items-stretch" style={{ gap: "var(--space-section-gap-x)" }}>
-          <div className="flex w-[220px] shrink-0 flex-col gap-3">
+          <div className="flex w-[340px] shrink-0 flex-col gap-3">
             <Dropdown label="Matrix" options={MATRIX_OPTIONS} value={matrixType} onChange={setMatrixType} />
             <Dropdown label="Delay Lines" options={DELAY_LINE_OPTIONS} value={delayLines} onChange={setDelayLines} />
             <Dropdown label="Matrix Stages" options={MATRIX_STAGE_OPTIONS} value={matrixStages} onChange={setMatrixStages} />
@@ -221,10 +218,16 @@ export function PluginPanel({
           <div className="flex-1">
             <MatrixWeights data={matrixData} />
           </div>
+
+          <div className="flex w-[150px] shrink-0 flex-col justify-center gap-4">
+            <ToggleSwitch label="Infinite" checked={infinite} onChange={setInfinite} />
+            <ToggleSwitch label="Freeze" checked={freeze} onChange={setFreeze} />
+          </div>
         </div>
       </div>
 
-      <PresetBar {...presetBarProps} />
+        <PresetBar {...presetBarProps} />
+      </div>
     </div>
   );
 }

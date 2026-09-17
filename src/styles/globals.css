@@ -46,18 +46,18 @@
   /* ノブのラベル欄は1行/2行どちらでも高さを固定し、Knobの全高（ひいてはGroupBoxの高さ）を揃える */
   --size-knob-label-height: 28px;
 
-  --space-groupbox-pad-top: 20px;
-  --space-groupbox-pad-x: 12px;
-  --space-groupbox-pad-bottom: 16px;
+  --space-groupbox-pad-top: 22px;
+  --space-groupbox-pad-x: 24px;
+  --space-groupbox-pad-bottom: 18px;
 
-  /* GroupBox内、ノブ同士の間隔 */
-  --space-knob-gap-inner: 16px;
+  /* GroupBox内、ノブ同士の間隔。「ツマミの段」でjustify-betweenが作るグループ間の間隔と近い見た目になるよう合わせる */
+  --space-knob-gap-inner: 32px;
   /* パネル内の主要セクション間（横方向）の間隔。GroupBox同士、Decay/Mix⇔Spectrum⇔Meter等 */
-  --space-section-gap-x: 32px;
+  --space-section-gap-x: 48px;
   /* 「ツマミの段」専用の、GroupBox/ノブクラスタ同士の横間隔（詰めて1行に収めるため section-gap-x より狭い） */
-  --space-knob-row-gap-x: 20px;
+  --space-knob-row-gap-x: 36px;
   /* パネル内の主要セクション間（縦方向）の間隔。区切り線を挟むブロック同士 */
-  --space-section-gap-y: 20px;
+  --space-section-gap-y: 28px;
 }
 
 :root {

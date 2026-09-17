@@ -57,16 +57,19 @@
 
 | トークン名 | 値 | 用途 |
 |---|---|---|
-| `space-panel-padding` | `24px`（実装は`p-6`） | パネル内側の余白 |
-| `space-section-gap-x` | `32px` | パネル内の主要セクション間（横方向）の間隔。MatrixWeights⇔Spectrum Analyzer⇔メーター、Matrix設定⇔Loss表示など、性質の異なるセクション同士 |
-| `space-section-gap-y` | `20px` | パネル内の主要セクション間（縦方向）の間隔。区切り線（Divider）を挟むブロック同士 |
-| `space-knob-gap-inner` | `16px` | ひとまとまりのノブ群の中での横間隔（GroupBox内、Decay/Mixクラスタ内など） |
-| `space-knob-row-gap-x` | `20px` | 「ツマミの段」内で、Decay/MixクラスタやGroupBox同士を並べる間隔（`space-section-gap-x`より狭く、同じ種類＝ノブ系コンポーネント同士を詰めて1行に収めるための専用トークン） |
-| `space-groupbox-pad-top` | `20px` | GroupBoxの上パディング（ラベルが枠線に重なる分、下より広めに取る） |
-| `space-groupbox-pad-x` | `12px` | GroupBoxの左右パディング |
-| `space-groupbox-pad-bottom` | `16px` | GroupBoxの下パディング |
-| `size-knob-lg` | `64px` | Decay/Mixなど主役パラメータ用ノブ直径 |
-| `size-knob-md` | `56px` | 単体で使う場合の標準ノブ直径 |
+| `space-panel-padding-x` | `32px`（実装は`px-8`） | パネル内側の左右の余白 |
+| `space-panel-padding-y` | `40px`（実装は`py-10`） | パネル内側の上下の余白。`max-height: 800px`の枠を目一杯使うため、横方向より広めに取る |
+| `space-section-gap-x` | `48px` | パネル内の主要セクション間（横方向）の間隔。Loss表示⇔Spectrum Analyzer⇔メーター、Matrix設定⇔MatrixWeightsなど、性質の異なるセクション同士 |
+| `space-section-gap-y` | `28px` | パネル内の主要セクション間（縦方向）の間隔。区切り線（Divider）を挟むブロック同士 |
+| `space-side-column-width` | `340px` | パネル左端に来る「補助情報列」（Loss表示列、Matrix設定のDropdown列）の共通幅。**行をまたいで同じ幅に揃えることで、列の左端が縦に一直線に並ぶ**（下記アライメント原則参照） |
+| `space-knob-gap-inner` | `32px` | ひとまとまりのノブ群の中での横間隔（GroupBox内、Decay/Mixクラスタ内など） |
+| `space-knob-row-gap-x` | `36px` | 「ツマミの段」で`flex-wrap`時にフォールバックとして使う横間隔（通常は後述の通り`justify-between`で自動計算されるため、1行に収まる限りは実際にはこれより広い間隔になる） |
+| `space-groupbox-pad-top` | `22px` | GroupBoxの上パディング（ラベルが枠線に重なる分、下より広めに取る） |
+| `space-groupbox-pad-x` | `24px` | GroupBoxの左右パディング |
+| `space-groupbox-pad-bottom` | `18px` | GroupBoxの下パディング |
+| `size-knob-xl` | `80px` | `Decay`/`Mix`など、パネル最重要パラメータ用ノブ直径。ラベル/数値のフォントサイズも他サイズより大きくする（後述） |
+| `size-knob-lg` | `64px` | 汎用の大きめノブ直径（単体使用時のデフォルト） |
+| `size-knob-md` | `56px` | GroupBox内で使う標準ノブ直径 |
 | `size-knob-sm` | `48px` | GroupBox内など、ノブ数が多いクラスタ用の縮小ノブ直径 |
 | `size-knob-label-height` | `28px` | ノブのラベル表示領域の**固定高さ**（後述） |
 | `size-meter-width` | `10px` | レベルメーター幅 |
@@ -93,13 +96,20 @@
 - 「揃っていない」状態を偶然の産物として放置しない。実装後は必ずブラウザで確認し、要素の上端・下端・中心線が意図通りに揃っているか、特定の列の下にだけ余白が残っていないかを目視でチェックする
 - 内容量の異なる兄弟要素を横に並べる場合、短い方を単に浮かせたまま（top揃えで放置）にしない。「揃える（中央揃え等）」か「伸ばして埋める（stretch）」のどちらかを必ず選択する。中途半端に余白として残すのは禁止
 
+**原則: 段（行）は基本的に横幅を目一杯使う。固定`gap`で詰めて片側に余白を残すのではなく、`justify-content: space-between`で要素同士を横幅いっぱいに広げて配置する。**
+
+- 複数のブロックを1つの段に並べるとき、コンテンツの合計幅がパネル幅より狭い場合は、`gap`を固定値にして左に寄せたまま残りを空けるのではなく、`justify-between`でブロック間の間隔そのものを伸縮させてパネル幅いっぱいに配置する（例: 「ツマミの段」の`Decay/Mix`クラスタと3つの`GroupBox`）
+- 固定`gap`（`space-knob-row-gap-x`等）は、`flex-wrap`で折り返しが発生した場合のフォールバック間隔としてのみ使う。1行に収まっている限りは`justify-between`側の自動間隔が優先される
+- 逆に、意図的に左右どちらかへ寄せたい・グルーピングを明確にしたい場合（例: Loss表示+トグルを左端にまとめる、Preset操作をひとまとまりにする等）は、その旨が分かるように隣接して配置し、"空いた場所に偶然余白が残る"状態とは区別する
+
 #### 余白を残さないための方針
 
-パネル幅は`max-width: 800px`に固定しているため、パラメータ数の多いセクション（8つのノブなど）を1行に収めようとすると単純な等倍縮小では収まらないことがある。その場合は次の優先順位で調整する:
+パネル幅は`max-width: 1200px`に固定しているため、パラメータ数の多いセクション（8つのノブなど）を1行に収めようとすると単純な等倍縮小では収まらないことがある。その場合は次の優先順位で調整する:
 
-1. まず間隔（`space-knob-row-gap-x` / `space-knob-gap-inner` / `space-groupbox-pad-x`）を詰める
-2. それでも収まらない場合、優先度の低いパラメータ群のノブサイズを`size-knob-md`→`size-knob-sm`に落とす（主役の`Decay`/`Mix`は`lg`のまま維持し、情報階層を保つ）
-3. 行の途中半端な位置で折り返して余白ができるくらいなら、詰めて1行に収める方を優先する
+1. まず`justify-between`で横幅いっぱいに配置できないか検討する（上記の原則）
+2. それでも窮屈な場合は間隔（`space-knob-gap-inner` / `space-groupbox-pad-x`）を詰める
+3. それでも収まらない場合、優先度の低いパラメータ群のノブサイズを`size-knob-md`→`size-knob-sm`に落とす（主役の`Decay`/`Mix`は`lg`のまま維持し、情報階層を保つ）
+4. 行の途中半端な位置で折り返して余白ができるくらいなら、詰めて1行に収める方を優先する
 
 ### 2.4 エフェクト
 
@@ -125,9 +135,10 @@
   - 周囲のドット目盛（270°スイープ、非アクティブ = `color-accent-mint-dim`、アクティブ範囲 = `color-accent-mint` + `glow-accent`）
   - 下部ラベル（`font-size-label`、`color-text-secondary`。`\n`で複数行ラベルにも対応。表示領域は`size-knob-label-height`で固定し、1行/2行どちらでも同じ`size`のノブは全高が揃う）
   - さらにその下、`valueLabel`（任意）を指定するとフォーマット済みの数値（例: `3.20 s`、`120 Hz`）を`color-accent-mint`で表示
-- **バリアント**: `size` = `lg`(64px) / `md`(56px) / `sm`(48px)
+- **バリアント**: `size` = `xl`(80px) / `lg`(64px) / `md`(56px) / `sm`(48px)。ノブ本体の直径だけでなく、下部ラベル・`valueLabel`のフォントサイズも`size`に応じて拡大縮小する（`xl`はラベル18px/数値22px、`lg`はラベル16px/数値17px、`md`はラベル15px/数値16px、`sm`はラベル14px/数値14px）。大きいノブほど文字だけ小さいままだと不釣り合いに見えるため、サイズと文字は必ず連動させる
 - **状態**: `default`, `hover`（ベゼルがわずかに明るくなる）, `active/dragging`（グローが強まる）, `disabled`（彩度を落とす）
 - **Props例**: `label`, `value`, `min`, `max`, `defaultValue`, `size`, `valueLabel`, `onChange`
+- ノブ本体を包む外枠は`width`ではなく`min-width`（=ノブ直径）を使う。`valueLabel`（例: `8000 Hz`）はフォントサイズを上げるとノブ本体より横幅が必要になることがあり、固定`width`だと折り返してしまう。`min-width` + `valueLabel`側の`whitespace-nowrap`で、ノブより文字が横に広がっても折り返さないようにする
 
 ### 3.2 `GroupBox`（パラメータグループ枠）
 
@@ -174,6 +185,7 @@
 ### 3.7 `ToggleSwitch`
 
 - ラベル + ピル型のトグル。OFF時は`color-toggle-track-off`のダークトラック、ON時は`color-accent-mint-dim`トラック＋`glow-accent`
+- トラック28×48px・つまみ18×18px。**つまみのサイズはトラックの内寸（トラック幅/高さ − border − padding）に正確に一致させる**。ここがズレるとつまみが枠からはみ出して見える（実際に一度この不具合が発生したため、サイズ変更時は要注意）
 - `Infinite` / `Freeze` のような二値パラメータに使用
 - **Props**: `label`, `checked`, `onChange`, `disabled`
 
@@ -198,15 +210,27 @@
 
 - ラベル + infoアイコン + 数値、または簡易スパークライン（`trend?: number[]`、ミント色）のどちらかを表示
 - `Spectral Loss`（トレンド表示）/ `Sparsity Loss`（数値表示）に使用
+- スパークラインは`viewBox`固定＋`preserveAspectRatio="none"`＋`w-full h-11`で、**親コンテナの横幅いっぱいに伸縮する**（`SpectrumAnalyzer`/`MatrixWeights`と同じ考え方）。固定px幅の小さなグラフとして埋もれさせない
 
 ### 3.11 `PluginPanel`（外枠コンテナ）
 
 - 上記コンポーネントすべてを内包する角丸パネル（`radius-panel`、`color-panel-bg`、`shadow-panel-outer` + `shadow-panel-inset`）
 - 背景に `color-bg-canvas` と `color-bg-canvas-glow`（波状のミントグローを模したデコレーション）を敷く
-- レイアウト: 上段に `StatReadout`（Spectral/Sparsity Loss）+ `ToggleSwitch`（Infinite/Freeze）+ `SpectrumAnalyzer` + I/Oメーター + ロゴ、中段（ツマミの段）に Decay/Mix ノブと `GroupBox` で束ねたパラメータノブ群（Delay系 / Modulation系 / Filter系）を1行に集約、下段に Matrix設定（Dropdown×3、縦積み）+ `MatrixWeights`、最下段に `PresetBar`
+- レイアウト: 上段に `StatReadout`（Spectral/Sparsity Loss）+ `SpectrumAnalyzer` + I/Oメーター + ロゴ、中段（ツマミの段）に Decay/Mix ノブと `GroupBox` で束ねたパラメータノブ群（Delay系 / Modulation系 / Filter系）を1行に集約、下段に Matrix設定（Dropdown×3、縦積み）+ `MatrixWeights` + `ToggleSwitch`（Infinite/Freeze、右端）、最下段に `PresetBar`
 - 上段・下段はともに`items-stretch`で揃え、`SpectrumAnalyzer`は上段の左列（Loss表示）・右列（メーター）と、`MatrixWeights`は下段のMatrix設定（Dropdown縦積み）と、それぞれ同じ高さまで縦に伸びる。左右で高さの基準となる列（Loss表示 / Matrix設定）は固定幅・固定コンテンツ量、可変側（SpectrumAnalyzer / MatrixWeights）が`h-full`でそれに合わせる、という関係を統一ルールとする
+- 上段の左列（`StatReadout`列）と下段の左列（`Dropdown`列）はどちらも`space-side-column-width`（340px）で共通化し、行をまたいで左端が一直線に揃う。上段右端のI/Oメーター+ロゴ列も、内容量が異なるため`self-center`で行の高さに対して上下中央揃えにする（top揃えのまま放置すると片側に余白が残るため）
+- `Decay`/`Mix`クラスタと最初の`GroupBox`（Delay）の間隔は、`justify-between`任せにすると内容量次第で詰まりすぎることがあるため、クラスタ側に`pr-6`の固定余白を追加して最低限の間隔を保証している。ただし行全体の間隔（`columnGap`）を固定で足すと`flex-wrap`が誘発され段が折り返って高さが跳ねるため、**行全体ではなく特定のペアだけに`padding`で余白を足す**のが安全
+- 下段右端の`ToggleSwitch`列は幅150px。ラベルとスイッチは`ToggleSwitch`内部で`justify-between`のため、列幅を広げすぎるとラベル-スイッチ間が間延びする。列幅は「中身が窮屈にならない最小限」に留める
 - パラメータ（Decay / Mix / Delay / Predelay / Predelay Feedback / External Feedback / Modulation / Damping / HPF / LPF）は内部状態として保持し、ノブの`valueLabel`をリアルタイム更新。HPF/LPFの値は`SpectrumAnalyzer`のカーブにもそのまま反映される
 - `matrixData` / `spectralLossTrend` / `sparsityLoss` はpropsで外部から差し替え可能
+
+#### 表示スケールについて
+
+このコンポーネント集は実寸（`w-[1200px]`、フォント・ノブ・余白すべて本来のサイズ）で組んだうえで、`PluginPanel`の最外層だけ`transform: scale(0.5)`でコンパクトに縮小表示している（アスペクト比を保ったまま全体を1/2にする指示への対応）。実装上のポイント:
+
+- スケール対象のパネル本体（角丸・境界線・シャドウを持つ要素）に`transform: scale(0.5)`と`transform-origin: top left`を指定し、実寸（1200px幅、可変高さ）のまま描画させる
+- その外側に、**スケール後のサイズと同じ固定`width`/`height`を持つ`overflow: hidden`なラッパー**を置く。`transform`はレイアウト上の占有サイズを変えないため、この外側ラッパーがないと縮小後の見た目の周囲に実寸ぶんの余白が残ってしまう
+- 中身（フォントサイズ・ノブの`min-width`など）を変更すると実寸の高さ・幅が変わるため、**ラッパーの固定`width`/`height`は都度ブラウザで実測して追従させる必要がある**（ズレると最下段の`PresetBar`が見切れる、逆に余白が残る、のどちらかが起きる）。値を変更したら必ずスクリーンショットで下端まで表示されているか確認すること
 
 ## 4. レイアウトグリッド（参考）
 
@@ -214,26 +238,25 @@
 ┌──────────────────────────────────────────────────────────────────┐
 │ Spectral Loss     SPECTRUM ANALYZER                   [I][O] LOGO │
 │ Sparsity Loss                                                     │
-│ Infinite / Freeze                                                 │
 ├──────────────────────────────────────────────────────────────────┤
 │ (Decay)(Mix) ┌Delay───────────┐┌Modulation─┐┌Filter────┐          │
 │              │Delay Predelay …││Mod Damp   ││HPF LPF   │          │
 │              └─────────────────┘└───────────┘└──────────┘         │
 ├──────────────────────────────────────────────────────────────────┤
-│ MATRIX          ┌────────────────────────────────────────────┐   │
-│ [Random-angle▾] │              MATRIX WEIGHTS                 │   │
-│ DELAY LINES      │                                              │   │
-│ [64          ▾] │                                              │   │
-│ MATRIX STAGES    │                                              │   │
-│ [4           ▾] └────────────────────────────────────────────┘   │
+│ MATRIX          ┌──────────────────────────────────┐ Infinite    │
+│ [Random-angle▾] │           MATRIX WEIGHTS          │ Freeze      │
+│ DELAY LINES      │                                    │             │
+│ [64          ▾] │                                    │             │
+│ MATRIX STAGES    │                                    │             │
+│ [4           ▾] └──────────────────────────────────┘             │
 ├──────────────────────────────────────────────────────────────────┤
 │ Preset ◀ [Init] ▶ [name入力] [Save][Init][Bypass]                 │
 └──────────────────────────────────────────────────────────────────┘
 ```
 
-- 1段目: 左列に`StatReadout`（Spectral/Sparsity Loss）と`ToggleSwitch`（Infinite/Freeze）を縦積み、中央に`SpectrumAnalyzer`（`items-stretch`で左列・右列と同じ高さまで伸長）、右にI/Oメーターとロゴ
-- 2段目: `Decay`/`Mix`と3つの`GroupBox`（Delay / Modulation / Filter）を**すべて1行に集約**した「ツマミの段」。間隔は`space-knob-row-gap-x`、収まりきらない場合はノブサイズを`sm`に落として対応する（上記「余白を残さないための方針」参照）
-- 3段目: Matrix設定（`Dropdown`×3を**縦積み**、幅固定`220px`。選択肢の長いラベルが省略されないよう横幅に余裕を持たせる）と`MatrixWeights`（右、`flex-1`で残り幅いっぱいに拡大 + `items-stretch`でDropdown列と同じ高さまで拡大。両方とも「余白を残さないための方針」に従い、余白ではなくコンテンツ自体を伸ばして埋める）
+- 1段目: 左列（`space-side-column-width`=340px）に`StatReadout`（Spectral/Sparsity Loss）を縦積み、中央に`SpectrumAnalyzer`（`items-stretch`で左列・右列と同じ高さまで伸長）、右にI/Oメーター+ロゴ（`self-center`で行の高さに対して上下中央揃え）
+- 2段目: `Decay`/`Mix`（`size-knob-xl`で最も大きく強調）と3つの`GroupBox`（Delay / Modulation / Filter、内部は`size-knob-md`）を**すべて1行に集約**した「ツマミの段」。`justify-between`で横幅いっぱいに配置し、収まりきらない場合はノブサイズを`sm`に落として対応する（上記「余白を残さないための方針」参照）
+- 3段目: 左列（`space-side-column-width`=260px、1段目と共通幅）にMatrix設定（`Dropdown`×3を**縦積み**。選択肢の長いラベルが省略されないよう横幅に余裕を持たせる）、中央に`MatrixWeights`（`flex-1`で残り幅いっぱいに拡大 + `items-stretch`でDropdown列と同じ高さまで拡大）、右に`ToggleSwitch`（Infinite/Freeze、幅220px・`border-l`で区切り、`self-center`で行の高さに対して上下中央揃え）。トグル列はラベルとスイッチの間の余白にも意味があるため、詰めすぎず`justify-between`が効く幅を確保する
 - 4段目: `PresetBar`
 
 ## 5. Storybookでの管理方針

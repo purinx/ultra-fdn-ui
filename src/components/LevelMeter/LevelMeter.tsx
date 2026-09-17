@@ -38,7 +38,7 @@ export function LevelMeter({ level, label, segments = 20, height = 160 }: LevelM
           }}
         />
       </div>
-      <span className="text-[10px] font-medium uppercase tracking-wide text-text-secondary">{label}</span>
+      <span className="text-[14px] font-medium uppercase tracking-wide text-text-secondary">{label}</span>
     </div>
   );
 }

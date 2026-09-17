@@ -8,7 +8,7 @@ function Button({
   return (
     <button
       type="button"
-      className={`rounded-control border border-control-border bg-control-bg px-3 py-1.5 text-[11px] font-semibold tracking-wide text-text-secondary transition-colors duration-[var(--transition-control)] hover:text-text-primary ${className}`}
+      className={`rounded-control border border-control-border bg-control-bg px-3 py-1.5 text-[15px] font-semibold tracking-wide text-text-secondary transition-colors duration-[var(--transition-control)] hover:text-text-primary ${className}`}
       {...props}
     >
       {children}
@@ -64,11 +64,11 @@ export function PresetBar({
 }: PresetBarProps) {
   return (
     <div className="flex items-center gap-3 rounded-b-panel border-t border-panel-border bg-[#232523] px-4 py-2.5">
-      <span className="text-[11px] font-medium text-text-secondary">Preset</span>
+      <span className="text-[15px] font-medium text-text-secondary">Preset</span>
 
       <NavButton direction="prev" onClick={onPrevPreset} aria-label="Previous preset" />
       <div className="flex min-w-[140px] flex-1 items-center justify-center rounded-control border border-control-border bg-control-bg px-3 py-1.5">
-        <span className="text-[13px] font-semibold text-accent-mint">{presetName}</span>
+        <span className="text-[18px] font-semibold text-accent-mint">{presetName}</span>
       </div>
       <NavButton direction="next" onClick={onNextPreset} aria-label="Next preset" />
 
@@ -77,7 +77,7 @@ export function PresetBar({
         value={saveName}
         onChange={(event) => onSaveNameChange?.(event.target.value)}
         placeholder="Preset name"
-        className="w-[130px] rounded-control border border-control-border bg-control-bg px-3 py-1.5 text-[11px] text-text-primary placeholder:text-text-muted"
+        className="w-[130px] rounded-control border border-control-border bg-control-bg px-3 py-1.5 text-[15px] text-text-primary placeholder:text-text-muted"
       />
 
       <Button onClick={onSave}>Save</Button>

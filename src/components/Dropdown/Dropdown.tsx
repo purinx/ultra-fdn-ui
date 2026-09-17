@@ -15,11 +15,11 @@ export function Dropdown({ label, options, value, onChange, disabled = false }: 
   return (
     <label className="flex flex-col gap-1">
       {label && (
-        <span className="text-[10px] font-medium uppercase tracking-wider text-text-secondary">{label}</span>
+        <span className="text-[14px] font-medium uppercase tracking-wider text-text-secondary">{label}</span>
       )}
       <div className="relative">
         <select
-          className="w-full appearance-none rounded-control border border-control-border bg-control-bg py-1.5 pl-3 pr-8 text-[12px] font-medium text-text-primary transition-colors duration-[var(--transition-control)] hover:border-[var(--color-accent-mint)] disabled:opacity-50"
+          className="w-full appearance-none rounded-control border border-control-border bg-control-bg py-1.5 pl-3 pr-8 text-[16px] font-medium text-text-primary transition-colors duration-[var(--transition-control)] hover:border-[var(--color-accent-mint)] disabled:opacity-50"
           value={value}
           disabled={disabled}
           onChange={(event) => onChange?.(event.target.value)}

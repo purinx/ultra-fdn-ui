@@ -16,7 +16,7 @@ export function GroupBox({ label, children }: GroupBoxProps) {
         paddingRight: "var(--space-groupbox-pad-x)",
       }}
     >
-      <span className="absolute -top-2 left-3 bg-[var(--color-groupbox-label-bg)] px-1 text-[10px] uppercase tracking-wider text-groupbox-label">
+      <span className="absolute -top-2 left-3 bg-[var(--color-groupbox-label-bg)] px-1 text-[14px] uppercase tracking-wider text-groupbox-label">
         {label}
       </span>
       <div className="flex items-start" style={{ gap: "var(--space-knob-gap-inner)" }}>

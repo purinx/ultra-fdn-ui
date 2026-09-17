@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 
-export type KnobSize = "lg" | "md" | "sm";
+export type KnobSize = "xl" | "lg" | "md" | "sm";
 
 export interface KnobProps {
   label: string;
@@ -21,7 +21,9 @@ const SWEEP = END_ANGLE - START_ANGLE;
 const DOT_COUNT = 25;
 const DRAG_RANGE_PX = 180;
 
-const SIZE_PX: Record<KnobSize, number> = { lg: 64, md: 56, sm: 48 };
+const SIZE_PX: Record<KnobSize, number> = { xl: 80, lg: 64, md: 56, sm: 48 };
+const LABEL_FONT_PX: Record<KnobSize, number> = { xl: 18, lg: 16, md: 15, sm: 14 };
+const VALUE_FONT_PX: Record<KnobSize, number> = { xl: 22, lg: 17, md: 16, sm: 14 };
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
@@ -96,7 +98,7 @@ export function Knob({
   const pointer = polarToXY(pointerLength, angle);
 
   return (
-    <div className="flex flex-col items-center gap-2 select-none" style={{ width: px }}>
+    <div className="flex flex-col items-center gap-2 select-none" style={{ minWidth: px }}>
       <div
         className="relative touch-none"
         style={{
@@ -160,14 +162,19 @@ export function Knob({
       </div>
       <div
         className="flex items-center justify-center"
-        style={{ height: "var(--size-knob-label-height)" }}
+        style={{ height: Math.ceil(LABEL_FONT_PX[size] * 1.25 * 2) }}
       >
-        <span className="whitespace-pre-line text-center text-[11px] font-medium leading-tight tracking-wide text-text-secondary">
+        <span
+          className="whitespace-pre-line text-center font-medium leading-tight tracking-wide text-text-secondary"
+          style={{ fontSize: LABEL_FONT_PX[size] }}
+        >
           {label}
         </span>
       </div>
       {valueLabel && (
-        <span className="text-[11px] font-semibold text-accent-mint">{valueLabel}</span>
+        <span className="whitespace-nowrap font-semibold text-accent-mint" style={{ fontSize: VALUE_FONT_PX[size] }}>
+          {valueLabel}
+        </span>
       )}
     </div>
   );

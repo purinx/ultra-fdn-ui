@@ -36,7 +36,7 @@ export function MatrixWeights({ data, title = "Matrix Weights" }: MatrixWeightsP
 
   return (
     <div className="flex h-full w-full flex-col gap-1.5">
-      <span className="text-[10px] font-semibold uppercase tracking-wider text-groupbox-label">{title}</span>
+      <span className="text-[15px] font-semibold uppercase tracking-wider text-groupbox-label">{title}</span>
       <div className="flex flex-1 gap-2">
         <div
           className="grid flex-1 gap-px overflow-hidden rounded-[3px] border border-divider"
@@ -49,7 +49,7 @@ export function MatrixWeights({ data, title = "Matrix Weights" }: MatrixWeightsP
 
         <div className="flex items-stretch gap-1.5">
           <div className="w-2 rounded-full" style={{ background: "var(--gradient-matrix-scale)" }} />
-          <div className="flex flex-col justify-between py-0.5 text-[9px] font-medium text-text-muted">
+          <div className="flex flex-col justify-between py-0.5 text-[13px] font-medium text-text-muted">
             <span>+1</span>
             <span>0</span>
             <span>-1</span>
