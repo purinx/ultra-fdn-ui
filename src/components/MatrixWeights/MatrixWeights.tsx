@@ -35,11 +35,11 @@ export function MatrixWeights({ data, title = "Matrix Weights" }: MatrixWeightsP
   const cols = matrix[0]?.length ?? 1;
 
   return (
-    <div className="flex w-full flex-col gap-1.5">
+    <div className="flex h-full w-full flex-col gap-1.5">
       <span className="text-[10px] font-semibold uppercase tracking-wider text-groupbox-label">{title}</span>
-      <div className="flex gap-2">
+      <div className="flex flex-1 gap-2">
         <div
-          className="grid h-[128px] flex-1 gap-px overflow-hidden rounded-[3px] border border-divider"
+          className="grid flex-1 gap-px overflow-hidden rounded-[3px] border border-divider"
           style={{ gridTemplateColumns: `repeat(${cols}, 1fr)`, gridTemplateRows: `repeat(${matrix.length}, 1fr)` }}
         >
           {matrix.flatMap((row, r) =>

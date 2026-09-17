@@ -211,17 +211,11 @@ export function PluginPanel({
 
         <div className="h-px bg-divider" />
 
-        <div className="flex items-start" style={{ gap: "var(--space-section-gap-x)" }}>
-          <div className="flex shrink-0" style={{ gap: "var(--space-knob-gap-inner)" }}>
-            <div className="w-[150px]">
-              <Dropdown label="Matrix" options={MATRIX_OPTIONS} value={matrixType} onChange={setMatrixType} />
-            </div>
-            <div className="w-[110px]">
-              <Dropdown label="Delay Lines" options={DELAY_LINE_OPTIONS} value={delayLines} onChange={setDelayLines} />
-            </div>
-            <div className="w-[110px]">
-              <Dropdown label="Matrix Stages" options={MATRIX_STAGE_OPTIONS} value={matrixStages} onChange={setMatrixStages} />
-            </div>
+        <div className="flex items-stretch" style={{ gap: "var(--space-section-gap-x)" }}>
+          <div className="flex w-[220px] shrink-0 flex-col gap-3">
+            <Dropdown label="Matrix" options={MATRIX_OPTIONS} value={matrixType} onChange={setMatrixType} />
+            <Dropdown label="Delay Lines" options={DELAY_LINE_OPTIONS} value={delayLines} onChange={setDelayLines} />
+            <Dropdown label="Matrix Stages" options={MATRIX_STAGE_OPTIONS} value={matrixStages} onChange={setMatrixStages} />
           </div>
 
           <div className="flex-1">
